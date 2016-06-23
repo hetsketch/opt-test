@@ -35,34 +35,14 @@ public class IpPrinter {
     }
 
     public void printIpRange() {
-        System.out.println(start);
-        System.out.println(end);
-        int[] startIp = Arrays.stream(start.split("\\.")).mapToInt(Integer::parseInt).toArray();
-        int[] endIp = Arrays.stream(end.split("\\.")).mapToInt(Integer::parseInt).toArray();
-        System.out.println(Arrays.toString(startIp));
-        System.out.println(Arrays.toString(endIp));
+        long startLongIp = stringIpToLongIp(start);
+        long endLongIp = stringIpToLongIp(end);
 
-        StringBuilder sb = new StringBuilder();
-
-//        for (int i = 0; i < 4; i++) {
-//            if (startIp[i] < endIp[i]) {
-//                for (int j = startIp[i]+1; j < endIp[i]; j++) {
-//                    System.out.println(sb.toString() + j);
-//                    sb.append(".");
-//
-//                }
-//            } else {
-//                sb.append(startIp[i]);
-//                sb.append(".");
-//            }
-//        }
-        for (int i = 0; i < 4; i++) {
-            if (startIp[i] < endIp[i]) {
-
-            }
+        longIpToStringIp(startLongIp);
+        while (startLongIp < endLongIp - 1) {
+            startLongIp++;
+            System.out.println(longIpToStringIp(startLongIp));
         }
-//        System.out.println(sb.toString());
-
     }
 
     //check ip with regexp pattern
@@ -76,5 +56,36 @@ public class IpPrinter {
         return matcher.matches();
     }
 
+    public long stringIpToLongIp(String ip) {
+        long[] ipArray = Arrays.stream(ip.split("\\.")).mapToLong(Long::parseLong).toArray();
+        long result = 0;
+        for (int i = 0; i < ipArray.length; i++) {
+            switch (i) {
+                case 0:
+                    result |= ipArray[i] << 24;
+                    break;
+                case 1:
+                    result |= ipArray[i] << 16;
+                    break;
+                case 2:
+                    result |= ipArray[i] << 8;
+                    break;
+                case 3:
+                    result |= ipArray[i];
+            }
+        }
+        return result;
+    }
 
+    public String longIpToStringIp(long longIp) {
+        StringBuilder sb = new StringBuilder();
+        sb.append((longIp >> 24) & 0xFF);
+        sb.append(".");
+        sb.append((longIp >> 16) & 0xFF);
+        sb.append(".");
+        sb.append((longIp >> 8) & 0xFF);
+        sb.append(".");
+        sb.append(longIp & 0xFF);
+        return sb.toString();
+    }
 }
