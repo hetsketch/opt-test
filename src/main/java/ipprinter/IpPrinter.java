@@ -46,7 +46,7 @@ public class IpPrinter {
     }
 
     //check ip with regexp pattern
-    private boolean isIpValid(String ip) {
+    public boolean isIpValid(String ip) {
         String pattern = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                 "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
                 "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
